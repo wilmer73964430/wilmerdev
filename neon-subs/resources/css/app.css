@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #00E676;
+    --color-primary-dark: #00C853;
+    --color-accent: #00FFD1;
+    --color-bg: #0A0F0D;
+    --color-text: #E6FFE6;
+    --color-text-muted: #A3F7B5;
+}
+
+body {
+    @apply bg-[#0A0F0D] text-[#E6FFE6] font-sans;
+}
+
+.glow-card {
+    @apply rounded-3xl bg-[#0A0F0D] shadow-[0_0_30px_rgba(0,230,118,0.25)] border border-[#00C853]/30 backdrop-blur-lg;
+}
+
+.btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-[#0A0F0D] bg-[#00E676] hover:bg-[#00C853] transition transform hover:-translate-y-0.5;
+}
+
+.btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold border border-[#00E676] text-[#00E676] hover:bg-[#00E676] hover:text-[#0A0F0D] transition;
+}
+
+.section-title {
+    @apply text-4xl md:text-5xl font-extrabold tracking-tight;
+}
+
+.card-grid {
+    @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.hero-gradient {
+    background: radial-gradient(circle at top, rgba(0, 230, 118, 0.35), transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(0, 255, 209, 0.25), transparent 55%),
+        #0A0F0D;
+}
+
+.focus-ring {
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00FFD1];
+}
