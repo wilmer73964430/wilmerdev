@@ -1,0 +1,26 @@
+{
+  "name": "@socialmentorify/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "vitest",
+    "dev": "tsup src/index.ts --watch"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "tsup": "^7.2.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  }
+}
