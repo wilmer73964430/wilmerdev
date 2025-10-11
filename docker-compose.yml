@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: socialmentorify
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  api:
+    build: ./apps/api
+    env_file: .env
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3001:3001"
+  web:
+    build: ./apps/web
+    env_file: .env
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+  worker:
+    build: ./apps/worker
+    env_file: .env
+    depends_on:
+      - redis
+volumes:
+  postgres_data:

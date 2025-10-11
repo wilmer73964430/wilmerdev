@@ -1,0 +1,26 @@
+{
+  "name": "worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "build": "tsup src/main.ts --format esm,cjs",
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "bullmq": "^4.14.0",
+    "ioredis": "^5.3.2",
+    "@socialmentorify/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "ts-node": "^10.9.2",
+    "tsup": "^7.2.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  }
+}
