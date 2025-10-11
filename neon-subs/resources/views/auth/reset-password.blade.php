@@ -1,0 +1,24 @@
+<x-layouts.app title="Restablecer contraseña">
+    <section class="py-24">
+        <div class="mx-auto max-w-md px-6">
+            <h1 class="section-title text-center text-3xl">Nueva contraseña</h1>
+            <form method="POST" action="{{ route('password.update') }}" class="glow-card mt-8 space-y-4 p-6">
+                @csrf
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                <div>
+                    <label class="text-xs uppercase text-[#A3F7B5]">Email</label>
+                    <input type="email" name="email" value="{{ old('email', $request->email) }}" class="focus-ring mt-1 w-full rounded-xl border border-[#00E676]/30 bg-black/30 px-4 py-2 text-sm" required>
+                </div>
+                <div>
+                    <label class="text-xs uppercase text-[#A3F7B5]">Contraseña</label>
+                    <input type="password" name="password" class="focus-ring mt-1 w-full rounded-xl border border-[#00E676]/30 bg-black/30 px-4 py-2 text-sm" required>
+                </div>
+                <div>
+                    <label class="text-xs uppercase text-[#A3F7B5]">Confirmar contraseña</label>
+                    <input type="password" name="password_confirmation" class="focus-ring mt-1 w-full rounded-xl border border-[#00E676]/30 bg-black/30 px-4 py-2 text-sm" required>
+                </div>
+                <button type="submit" class="btn-primary w-full focus-ring">Actualizar</button>
+            </form>
+        </div>
+    </section>
+</x-layouts.app>

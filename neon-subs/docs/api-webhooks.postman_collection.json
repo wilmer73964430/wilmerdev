@@ -1,0 +1,22 @@
+{
+  "info": {
+    "name": "Neon Subs Webhooks",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Stripe Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Stripe-Signature", "value": "test_signature" }
+        ],
+        "url": { "raw": "{{base_url}}/webhooks/stripe", "host": ["{{base_url}}"], "path": ["webhooks", "stripe"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"invoice.payment_succeeded\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"in_123\"\n    }\n  }\n}"
+        }
+      }
+    }
+  ]
+}
