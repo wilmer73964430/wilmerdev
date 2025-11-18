@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export const Footer = () => {
   return (
-    <footer className="mt-12 border-t border-white/6 pt-8 pb-6 text-slate-400">
+    <footer className="mt-12 border-t border-white/6 pt-8 pb-6 text-slate-400 bg-primary relative z-10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <h4 className="text-sm font-semibold text-slate-200">ADDUX.SHOP</h4>
