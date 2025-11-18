@@ -17,6 +17,9 @@ cp .env.example .env # deja valores dummy si solo vas a construir
 pnpm build           # no requiere conexión a la base
 ```
 
+> Tip: la primera vez `pnpm i` genera `pnpm-lock.yaml` e instala `turbo` en `node_modules`. Si intentas `pnpm build` sin haber
+> instalado dependencias, verás errores de "turbo no encontrado" o avisos de lockfile ausente.
+
 ## Variables de entorno
 Ejemplo en `.env.example` (MySQL):
 
