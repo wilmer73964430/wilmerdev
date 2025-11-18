@@ -1,0 +1,5 @@
+{
+  "extends": "./packages/config/tsconfig/base.json",
+  "include": ["apps", "packages", "scripts", "prisma"],
+  "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"]
+}
