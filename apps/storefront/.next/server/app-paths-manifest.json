@@ -1,0 +1,21 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/products/route": "app/api/products/route.js",
+  "/api/webhooks/stripe/route": "app/api/webhooks/stripe/route.js",
+  "/legal/privacidad/page": "app/legal/privacidad/page.js",
+  "/legal/terminos/page": "app/legal/terminos/page.js",
+  "/page": "app/page.js",
+  "/planes/page": "app/planes/page.js",
+  "/carrito/page": "app/carrito/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/contacto/page": "app/contacto/page.js",
+  "/faq/page": "app/faq/page.js",
+  "/login/page": "app/login/page.js",
+  "/registro/page": "app/registro/page.js",
+  "/cuenta/facturacion/page": "app/cuenta/facturacion/page.js",
+  "/cuenta/pedidos/page": "app/cuenta/pedidos/page.js",
+  "/cuenta/page": "app/cuenta/page.js",
+  "/cuenta/soporte/page": "app/cuenta/soporte/page.js",
+  "/cuenta/perfil/page": "app/cuenta/perfil/page.js",
+  "/cuenta/suscripciones/page": "app/cuenta/suscripciones/page.js"
+}

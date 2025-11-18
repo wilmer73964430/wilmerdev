@@ -4,17 +4,27 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primary: {
+          DEFAULT: '#0b1021',
+          50: '#f7fbfd',
+          100: '#eef7fb',
+          200: '#cdeff6',
+          500: '#4de2ff'
+        },
         neon: {
-          blue: '#4de2ff',
+          cyan: '#4de2ff',
           purple: '#a855f7',
-          pink: '#ff4dff'
+          pink: '#ff4dff',
+          lime: '#7fff6b'
         }
       },
       fontFamily: {
-        futuristic: ['"Space Grotesk"', 'Inter', 'sans-serif']
+        sans: ['Poppins', 'Inter', 'ui-sans-serif', 'system-ui'],
+        display: ['Poppins', 'ui-serif']
       },
       boxShadow: {
-        neon: '0 0 25px rgba(77, 226, 255, 0.6)'
+        neon: '0 0 25px rgba(77, 226, 255, 0.6)',
+        soft: '0 20px 60px rgba(0,0,0,0.5)'
       }
     }
   },

@@ -10,7 +10,7 @@ export const Button = ({ children, variant = 'primary', ...rest }: Props) => (
     className={`px-4 py-2 rounded-md font-semibold transition bg-gradient-to-r from-neon-blue to-neon-purple text-slate-900 shadow-neon ${
       variant === 'ghost' ? 'bg-transparent border border-neon-blue text-neon-blue' : ''
     }`}
-    {...rest}
+    {...(rest as any)}
   >
     {children}
   </motion.button>

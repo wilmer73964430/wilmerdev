@@ -4,10 +4,13 @@ import { AppLayout } from '../components/layout/AppLayout';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
+import { Hero } from '../components/home/Hero';
 
 export default function Home() {
   return (
     <AppLayout>
+      <Hero />
+      <div className="h-6" />
       <section className="grid md:grid-cols-2 gap-10 items-center">
         <div className="space-y-6">
           <Badge tone="purple">Compra única garantizada</Badge>
