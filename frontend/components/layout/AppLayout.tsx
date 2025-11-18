@@ -11,7 +11,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => (
       <meta name="description" content="Marketplace para cuentas premium y cursos" />
     </Head>
     {/* Particle background sits behind content (reduced density) */}
-    <Particles density={0.0004} />
+    <Particles density={0.0004} mode="code" />
     <Header />
     <main className="relative px-6 md:px-12 py-8 max-w-6xl mx-auto space-y-8 z-10">{children}</main>
     <Footer />

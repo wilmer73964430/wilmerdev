@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from 'react';
 
-export default function Particles({ density = 0.0009 }: { density?: number }) {
+export default function Particles({ density = 0.0009, mode = 'dots' }: { density?: number; mode?: 'dots' | 'code' | 'mask' }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
 
@@ -26,6 +26,7 @@ export default function Particles({ density = 0.0009 }: { density?: number }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
+    const charSet = '01';
     const particles: {
       x: number;
       y: number;
@@ -33,6 +34,7 @@ export default function Particles({ density = 0.0009 }: { density?: number }) {
       vy: number;
       r: number;
       alpha: number;
+      char?: string;
     }[] = [];
 
     function initParticles() {
@@ -45,7 +47,7 @@ export default function Particles({ density = 0.0009 }: { density?: number }) {
 
     function createParticle() {
       const r = 1 + Math.random() * 3.5;
-      return {
+      const base = {
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.4,
@@ -53,16 +55,21 @@ export default function Particles({ density = 0.0009 }: { density?: number }) {
         r,
         alpha: 0.2 + Math.random() * 0.6
       };
+      if (mode === 'code') {
+        // downward drift for code rain
+        return { ...base, vx: (Math.random() - 0.3) * 0.2, vy: 0.4 + Math.random() * 0.6, char: charSet[Math.floor(Math.random() * charSet.length)] };
+      }
+      return base;
     }
 
     function step() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
 
-      // subtle gradient background overlay to blend with existing green
+      // subtle gradient overlay (dark blue / navy) to blend with page background
       const g = ctx.createLinearGradient(0, 0, width, height);
-      g.addColorStop(0, 'rgba(5,43,32,0.12)');
-      g.addColorStop(1, 'rgba(6,182,150,0.06)');
+      g.addColorStop(0, 'rgba(4,16,40,0.18)');
+      g.addColorStop(1, 'rgba(6,28,52,0.08)');
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, width, height);
 
@@ -72,21 +79,47 @@ export default function Particles({ density = 0.0009 }: { density?: number }) {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.x < -10) p.x = width + 10;
-        if (p.x > width + 10) p.x = -10;
-        if (p.y < -10) p.y = height + 10;
-        if (p.y > height + 10) p.y = -10;
+        if (mode === 'code') {
+          // reset when falling out
+          if (p.y > height + 20) {
+            p.y = -10 - Math.random() * 100;
+            p.x = Math.random() * width;
+            p.char = charSet[Math.floor(Math.random() * charSet.length)];
+          }
+        } else {
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
+        }
 
-        // glow circle
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(16,185,129, ${p.alpha * 0.25})`;
-        ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
-        ctx.fill();
+        if (mode === 'code') {
+          // draw matrix-like character
+          const fontSize = Math.max(10, p.r * 3 + 8);
+          ctx.font = `${fontSize}px monospace`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = `rgba(16,185,129, ${p.alpha})`;
+          ctx.fillText(p.char || '0', p.x, p.y);
+          // faint glow
+          ctx.globalAlpha = 0.12;
+          ctx.fillStyle = `rgba(16,185,129,1)`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, fontSize * 0.7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        } else {
+          // glow circle
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(16,185,129, ${p.alpha * 0.25})`;
+          ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+          ctx.fill();
 
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(16,185,129, ${p.alpha})`;
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(16,185,129, ${p.alpha})`;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // connection lines (short distance)
