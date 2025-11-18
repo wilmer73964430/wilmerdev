@@ -123,3 +123,81 @@ pnpm test:smoke
 
 7) **Verificación**
 - Prueba login, checkout de prueba y entrega de códigos. Revisa logs de Node en cPanel para solucionar permisos o variables faltantes.
+
+## Guía paso a paso en Visual Studio Code
+Sigue este flujo para construir todo el proyecto desde VS Code y dejarlo listo para subir a cPanel:
+
+1. **Preparar el entorno en VS Code**
+   - Instala las extensiones recomendadas: *ESLint*, *Prisma*, *Tailwind CSS IntelliSense*, *Prettier*, *Thunder Client* (o Postman externo) y *GitHub Actions* para ver pipelines.
+   - Abre la carpeta del repo en VS Code y asegúrate de tener **Node 18+**, **pnpm 8+** y **Docker Desktop** en ejecución para levantar MySQL/Mailhog.
+
+2. **Configurar variables de entorno**
+   - Copia `.env.example` a `.env` y coloca tus credenciales: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` y `DATABASE_URL` (ejemplo `mysql://USER:PASS@HOST:PORT/DBNAME`).
+   - Ajusta `NEXTAUTH_URL` con el dominio local (ej. `http://localhost:3000`) y agrega tus llaves de Stripe (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`).
+
+3. **Instalar dependencias**
+   - En la terminal integrada de VS Code (``Ctrl+` ``) ejecuta:
+     ```bash
+     pnpm i
+     ```
+
+4. **Levantar infraestructura local**
+   - En la misma terminal lanza MySQL y Mailhog con Docker:
+     ```bash
+     docker-compose up -d
+     ```
+   - Confirma que MySQL está arriba (`docker ps`) y que el puerto 3306 está libre si usas host local.
+
+5. **Migraciones y seed contra tu base**
+   - Con la `.env` ya apuntando a MySQL, ejecuta:
+     ```bash
+     pnpm db:push && pnpm db:seed
+     ```
+   - Alternativa manual: importa `prisma/schema.mysql.sql` en phpMyAdmin y luego, si deseas datos de ejemplo, corre solo `pnpm db:seed`.
+
+6. **Desarrollo y verificación rápida**
+   - Arranca el entorno dev orquestado por Turborepo:
+     ```bash
+     pnpm dev
+     ```
+   - Navega a `http://localhost:3000` (storefront) y `http://localhost:3001` (admin) para validar UI, login y navegación.
+   - Corre chequeos locales desde VS Code para detectar errores antes del despliegue:
+     ```bash
+     pnpm lint
+     pnpm typecheck
+     pnpm test
+     pnpm test:e2e
+     ```
+
+7. **Build de producción**
+   - Genera artefactos optimizados:
+     ```bash
+     pnpm build
+     ```
+   - Verifica que `.next` se genere en `apps/storefront/.next` y `apps/admin/.next`.
+
+8. **Empaquetar para cPanel**
+   - Crea un `.zip` incluyendo:
+     - `apps/storefront/.next`, `apps/admin/.next`
+     - `package.json`, `pnpm-lock.yaml`, `.env`, `prisma/`
+     - `node_modules/` (si tu hosting no instala dependencias) o, preferiblemente, solo el lockfile si tu proveedor permite `pnpm install --prod` en destino.
+   - Documenta los puertos asignados por cPanel y los subdominios que usarás.
+
+9. **Despliegue en cPanel**
+   - Sube y descomprime el `.zip` en el directorio de la app Node.
+   - Configura las dos apps en el selector de aplicaciones de cPanel:
+     - **Storefront**: ruta de proyecto `apps/storefront`, comando de inicio `pnpm start --filter storefront`.
+     - **Admin**: ruta `apps/admin`, comando `pnpm start --filter admin`.
+   - Reemplaza la `.env` con las credenciales reales del MySQL de cPanel y los dominios finales (`NEXTAUTH_URL`/subdominios). Asegura que ambas apps lean la misma configuración de base de datos.
+
+10. **Conectar con la base de datos en cPanel**
+    - Si aún no existen las tablas en el MySQL de cPanel, importa `prisma/schema.mysql.sql` desde phpMyAdmin o ejecuta `pnpm db:push` desde la terminal de cPanel (ajustando `DATABASE_URL`).
+    - Usa `pnpm db:seed` para generar datos demo (admin + productos + cupones) o crea tus propios registros.
+
+11. **Smoke test post-despliegue**
+    - Si tu hosting permite ejecución de scripts, corre `pnpm test:smoke` apuntando a la base y dominios remotos para verificar login, checkout y entrega digital. De lo contrario, ejecuta el smoke test en local apuntando a la base remota para validar el entorno antes de abrirlo a usuarios.
+
+12. **Tips de VS Code para mantenimiento**
+    - Usa *Tasks* (`.vscode/tasks.json`) si quieres atajos para `pnpm dev`, `pnpm lint`, etc.
+    - Habilita *Format on Save* con Prettier y *Code Actions on Save* para ESLint.
+    - Activa *Terminal Profiles* en VS Code para abrir shells ya posicionados en `apps/storefront` o `apps/admin` según trabajes en frontend o backend.
