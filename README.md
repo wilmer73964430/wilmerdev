@@ -9,9 +9,12 @@ Sistema de venta de suscripciones y códigos digitales con Turborepo, Next.js 14
 
 ## Configuración rápida
 
+> **Construcción local sin base de datos**: puedes compilar el proyecto completo sin levantar MySQL ni ejecutar migraciones; basta con instalar dependencias y correr `pnpm build`. La base de datos solo es necesaria cuando vayas a probar funcionalidades que lean/escriban datos.
+
 ```bash
 pnpm i
-cp .env.example .env
+cp .env.example .env # deja valores dummy si solo vas a construir
+pnpm build           # no requiere conexión a la base
 ```
 
 ## Variables de entorno
@@ -35,26 +38,39 @@ SMTP_PORT=1025
 
 ## Ejecutar en local
 
+### Solo construir (sin base de datos)
+1. Instala dependencias y copia variables:
+   ```bash
+   pnpm i
+   cp .env.example .env # puedes dejar DB_HOST/USER/PASS con placeholders
+   ```
+2. Compila todo el monorepo sin tocar MySQL:
+   ```bash
+   pnpm build
+   ```
+
+### Desarrollar con base de datos (cuando quieras probar flujos reales)
 1. **Bases de datos y mailhog (MySQL)**
-```bash
-docker-compose up -d
-```
-2. **Migraciones y seed**
-```bash
-pnpm db:push && pnpm db:seed
-```
+   ```bash
+   docker-compose up -d
+   ```
+2. **Migraciones y seed** (opcional si importas el SQL manualmente):
+   ```bash
+   pnpm db:push && pnpm db:seed
+   ```
+   - Alternativa: importa `prisma/schema.mysql.sql` en phpMyAdmin y omite las migraciones.
 3. **Desarrollo**
-```bash
-pnpm dev
-```
+   ```bash
+   pnpm dev
+   ```
 4. **Pruebas**
-```bash
-pnpm test && pnpm test:e2e
-```
+   ```bash
+   pnpm test && pnpm test:e2e
+   ```
 5. **Smoke test end-to-end**
-```bash
-pnpm test:smoke
-```
+   ```bash
+   pnpm test:smoke
+   ```
 
 ## Scripts principales
 - `pnpm dev`: orquesta ambos apps con Turborepo.
@@ -99,7 +115,7 @@ pnpm test:smoke
 ### Pasos principales (phpMyAdmin + despliegue rápido)
 1) **Base de datos**: en cPanel crea tu base y usuario (phpMyAdmin). Importa el dump `prisma/schema.mysql.sql` y confirma que aparecen las tablas (`User`, `Product`, `Order`, etc.).
 2) **Configurar credenciales**: copia `.env.example` a `.env` y pon tus valores reales: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL=mysql://USER:PASS@HOST:PORT/DBNAME`, `NEXTAUTH_URL` con tu dominio/subdominio y llaves de Stripe/NextAuth.
-3) **Build en local**: `pnpm i && pnpm build`. Si quieres semillas de demo en la base remota, ejecuta `pnpm db:seed` apuntando a esa base (puedes omitirlo si ya importaste el SQL y prefieres empezar vacío).
+3) **Build en local sin base**: `pnpm i && pnpm build`. Este paso no requiere MySQL porque solo compila Next.js. Si quieres semillas de demo en la base remota, ejecuta `pnpm db:seed` apuntando a esa base (puedes omitirlo si ya importaste el SQL y prefieres empezar vacío).
 4) **Empaquetar y subir**: crea un `.zip` con `apps/storefront/.next`, `apps/admin/.next`, `package.json`, `pnpm-lock.yaml`, `.env` y `prisma/` (incluye `node_modules/` solo si tu hosting no instala dependencias). Sube y descomprime en tu app Node de cPanel.
 5) **Configurar apps Node**: en cPanel crea dos apps:
    - **Storefront**: ruta `apps/storefront`, comando `pnpm start --filter storefront`.
@@ -179,8 +195,8 @@ Sigue este flujo para construir todo el proyecto desde VS Code y dejarlo listo p
    - Reemplaza la `.env` con las credenciales reales del MySQL de cPanel y los dominios finales (`NEXTAUTH_URL`/subdominios). Asegura que ambas apps lean la misma configuración de base de datos.
 
 10. **Conectar con la base de datos en cPanel**
-    - Si aún no existen las tablas en el MySQL de cPanel, importa `prisma/schema.mysql.sql` desde phpMyAdmin o ejecuta `pnpm db:push` desde la terminal de cPanel (ajustando `DATABASE_URL`).
-    - Usa `pnpm db:seed` para generar datos demo (admin + productos + cupones) o crea tus propios registros.
+    - Importa `prisma/schema.mysql.sql` en phpMyAdmin para crear tablas y referencias sin necesitar Prisma en el servidor.
+    - Ajusta la `.env` con tu `DATABASE_URL` real; solo cuando quieras datos demo ejecuta `pnpm db:seed` contra esa base (opcional si prefieres empezar limpio).
 
 11. **Smoke test post-despliegue**
     - Si tu hosting permite ejecución de scripts, corre `pnpm test:smoke` apuntando a la base y dominios remotos para verificar login, checkout y entrega digital. De lo contrario, ejecuta el smoke test en local apuntando a la base remota para validar el entorno antes de abrirlo a usuarios.
