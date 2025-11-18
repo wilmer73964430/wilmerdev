@@ -1,0 +1,28 @@
+{
+  "name": "@acme/admin",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@acme/ui": "workspace:*",
+    "next": "workspace:*",
+    "next-themes": "workspace:*",
+    "react": "workspace:*",
+    "react-dom": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "workspace:*",
+    "@types/react": "workspace:*",
+    "@types/react-dom": "workspace:*",
+    "autoprefixer": "workspace:*",
+    "postcss": "workspace:*",
+    "tailwindcss": "workspace:*",
+    "typescript": "workspace:*"
+  }
+}
