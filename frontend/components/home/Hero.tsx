@@ -9,7 +9,7 @@ export const Hero = () => {
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">ADDUX — Marketplace de cuentas premium</h1>
           <p className="text-lg text-slate-300 max-w-lg">Compra y vende cuentas de streaming y cursos con seguridad y soporte 24/7.</p>
           <div className="flex gap-4">
-            <Link href="/marketplace" className="inline-block bg-gradient-to-r from-neon-cyan to-neon-purple text-slate-900 px-6 py-3 rounded-md font-semibold">Explorar catálogo</Link>
+            <Link href="/marketplace" className="inline-block bg-gradient-to-r from-neon-green to-neon-teal text-slate-900 px-6 py-3 rounded-md font-semibold">Explorar catálogo</Link>
             <Link href="/register" className="inline-block border border-white/10 px-5 py-3 rounded-md text-sm">Crear cuenta</Link>
           </div>
           <div className="flex gap-6 text-xs text-slate-400 mt-4">

@@ -5,16 +5,15 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0b1021',
-          50: '#f7fbfd',
-          100: '#eef7fb',
-          200: '#cdeff6',
-          500: '#4de2ff'
+          DEFAULT: '#052b20',
+          50: '#f3fbf7',
+          100: '#e6f7ee',
+          200: '#cff2dd',
+          500: '#10b981'
         },
         neon: {
-          cyan: '#4de2ff',
-          purple: '#a855f7',
-          pink: '#ff4dff',
+          green: '#10b981',
+          teal: '#06b6d4',
           lime: '#7fff6b'
         }
       },
@@ -23,7 +22,7 @@ module.exports = {
         display: ['Poppins', 'ui-serif']
       },
       boxShadow: {
-        neon: '0 0 25px rgba(77, 226, 255, 0.6)',
+        neon: '0 0 25px rgba(16, 185, 129, 0.6)',
         soft: '0 20px 60px rgba(0,0,0,0.5)'
       }
     }

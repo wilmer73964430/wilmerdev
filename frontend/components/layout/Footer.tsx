@@ -12,18 +12,18 @@ export const Footer = () => {
         <div>
           <h5 className="text-sm font-medium text-slate-200">Enlaces</h5>
           <ul className="mt-3 text-xs space-y-2">
-            <li><Link href="/" className="hover:text-neon-cyan">Inicio</Link></li>
-            <li><Link href="/marketplace" className="hover:text-neon-cyan">Marketplace</Link></li>
-            <li><Link href="/credits" className="hover:text-neon-cyan">Créditos</Link></li>
+            <li><Link href="/" className="hover:text-neon">Inicio</Link></li>
+            <li><Link href="/marketplace" className="hover:text-neon">Marketplace</Link></li>
+            <li><Link href="/credits" className="hover:text-neon">Créditos</Link></li>
           </ul>
         </div>
 
         <div>
           <h5 className="text-sm font-medium text-slate-200">Soporte</h5>
           <ul className="mt-3 text-xs space-y-2">
-            <li><Link href="/help" className="hover:text-neon-cyan">Centro de ayuda</Link></li>
-            <li><Link href="/contact" className="hover:text-neon-cyan">Contacto</Link></li>
-            <li><Link href="/legal" className="hover:text-neon-cyan">Términos</Link></li>
+            <li><Link href="/help" className="hover:text-neon">Centro de ayuda</Link></li>
+            <li><Link href="/contact" className="hover:text-neon">Contacto</Link></li>
+            <li><Link href="/legal" className="hover:text-neon">Términos</Link></li>
           </ul>
         </div>
       </div>
