@@ -14,6 +14,26 @@ export default function Home() {
       <section className="grid md:grid-cols-2 gap-10 items-center">
         <div className="space-y-6">
           <Badge tone="purple">Compra única garantizada</Badge>
+
+          {/* Productos de prueba justo después del badge */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+            {[
+              { id: 1, title: 'Glow Pack Alpha', price: '9.99' },
+              { id: 2, title: 'Starter Kit Beta', price: '14.99' },
+              { id: 3, title: 'Pro Bundle Gamma', price: '29.99' }
+            ].map((p) => (
+              <Card key={p.id}>
+                <div className="h-24 w-full rounded-md bg-gradient-to-br from-neon-green to-neon-teal flex items-end p-3 text-slate-900 font-semibold">
+                  {p.title}
+                </div>
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="text-sm text-slate-300">${p.price}</div>
+                  <Link href="/checkout" className="text-xs bg-neon text-slate-900 px-3 py-1 rounded-full">Comprar</Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
             Marketplace neón para creadores que aman la velocidad y la seguridad.
           </h1>
