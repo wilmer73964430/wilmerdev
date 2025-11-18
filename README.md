@@ -96,33 +96,21 @@ pnpm test:smoke
 - Dockerfiles por app en `apps/storefront/Dockerfile` y `apps/admin/Dockerfile`.
 
 ## Instalación en cPanel (manual, compatible con MySQL)
-1) **Preparar base de datos**
-- Crear una base de datos MySQL y un usuario con permisos completos (puedes usar phpMyAdmin de cPanel). Guarda host, puerto, nombre, usuario y contraseña.
+### Pasos principales (phpMyAdmin + despliegue rápido)
+1) **Base de datos**: en cPanel crea tu base y usuario (phpMyAdmin). Importa el dump `prisma/schema.mysql.sql` y confirma que aparecen las tablas (`User`, `Product`, `Order`, etc.).
+2) **Configurar credenciales**: copia `.env.example` a `.env` y pon tus valores reales: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DATABASE_URL=mysql://USER:PASS@HOST:PORT/DBNAME`, `NEXTAUTH_URL` con tu dominio/subdominio y llaves de Stripe/NextAuth.
+3) **Build en local**: `pnpm i && pnpm build`. Si quieres semillas de demo en la base remota, ejecuta `pnpm db:seed` apuntando a esa base (puedes omitirlo si ya importaste el SQL y prefieres empezar vacío).
+4) **Empaquetar y subir**: crea un `.zip` con `apps/storefront/.next`, `apps/admin/.next`, `package.json`, `pnpm-lock.yaml`, `.env` y `prisma/` (incluye `node_modules/` solo si tu hosting no instala dependencias). Sube y descomprime en tu app Node de cPanel.
+5) **Configurar apps Node**: en cPanel crea dos apps:
+   - **Storefront**: ruta `apps/storefront`, comando `pnpm start --filter storefront`.
+   - **Admin**: ruta `apps/admin`, comando `pnpm start --filter admin`.
+   Ambas deben leer la misma `.env` con tu `DATABASE_URL` y claves reales.
+6) **Verificar**: abre tus dominios, inicia sesión, realiza un checkout de prueba y valida que los pedidos aparezcan. Revisa logs de Node en cPanel ante cualquier variable faltante.
 
-2) **Construir en local**
-- Clona el repo y copia `.env.example` a `.env` ajustando `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST` y `DATABASE_URL` con tus valores de MySQL (local, Docker o cPanel).
-- Ejecuta `pnpm i` y `pnpm build` para generar `.next` optimizados.
-- Ejecuta `pnpm db:push && pnpm db:seed` apuntando a la base remota para crear tablas y datos demo.
-
-3) **Empaquetar y subir**
-- Genera un archivo `.zip` con `apps/storefront/.next`, `apps/admin/.next`, `node_modules`, `package.json`, `pnpm-lock.yaml`, `prisma` y `.env` (sin exponer claves sensibles públicamente).
-- Sube el `.zip` al File Manager de cPanel y descomprímelo en el directorio de la aplicación Node.
-
-4) **Configurar aplicaciones Node en cPanel**
-- Crea dos aplicaciones Node (por ejemplo usando el selector de aplicaciones de cPanel):
-  - **Storefront**: raíz en `/path/apps/storefront`, comando de inicio `pnpm start --filter storefront`, puerto asignado por cPanel.
-  - **Admin**: raíz en `/path/apps/admin`, comando `pnpm start --filter admin`, puerto asignado por cPanel.
-- Asegura que ambas lean la misma `.env` (o duplica el archivo) con `DATABASE_URL` apuntando al MySQL de cPanel (nombre de base, usuario y contraseña propios), `NEXTAUTH_URL` ajustado al dominio/subdominio y claves de Stripe/NextAuth reales.
- - Si prefieres crear las tablas manualmente en cPanel, importa `prisma/schema.mysql.sql` en phpMyAdmin y luego ejecuta `pnpm db:seed` (o inserta tus usuarios/productos manualmente).
-
-5) **Proxy/Enrutamiento**
-- Configura dominios o subdominios para apuntar a los puertos internos que cPanel asigna a cada app (según herramienta de Proxy/Passenger o ajustes del proveedor). Usa HTTPS.
-
-6) **Cron/Workers opcionales**
-- Programa tareas de limpieza/reintentos si tu hosting lo permite (por ejemplo, cron para reintentos de webhooks o colas externas).
-
-7) **Verificación**
-- Prueba login, checkout de prueba y entrega de códigos. Revisa logs de Node en cPanel para solucionar permisos o variables faltantes.
+### Detalles ampliados (opcional)
+- **Proxy/Enrutamiento**: apunta dominios/subdominios a los puertos internos asignados por cPanel (Passenger/Proxy) y usa HTTPS.
+- **Cron/Workers**: si tu hosting lo permite, agenda reintentos de webhooks o tareas de limpieza.
+- **Datos iniciales**: si prefieres no usar el seed, puedes importar únicamente `prisma/schema.mysql.sql` (estructura + algunos cupones) y luego crear tus productos/usuarios desde el panel.
 
 ## Guía paso a paso en Visual Studio Code
 Sigue este flujo para construir todo el proyecto desde VS Code y dejarlo listo para subir a cPanel:
